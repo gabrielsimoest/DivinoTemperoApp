@@ -36,7 +36,7 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun initRegistryButtonListener(){
-        binding.registerButton.setOnClickListener{
+        binding.buttonRegister.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
