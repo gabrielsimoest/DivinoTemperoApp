@@ -37,7 +37,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

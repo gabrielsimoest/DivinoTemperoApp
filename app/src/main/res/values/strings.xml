@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">KotlinFoodOrder</string>
     <string name="title_activity_login">LoginActivity</string>
+
+    <string name="logo_description">Logo da Aplicação</string>
+    <string name="login_subtitle">Entre com sua conta</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Senha</string>
+    <string name="action_sign_in">Entrar</string>
+    <string name="no_account_question">Não tem uma conta?</string>
+    <string name="create_account">Criar uma conta</string>
 </resources>
