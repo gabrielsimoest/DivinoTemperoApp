@@ -1,11 +1,18 @@
 package com.example.kotlinfoodorder.ui.login
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class LoginViewModel : ViewModel()  {
-    val currentUser: MutableLiveData<LoginUserModel> by lazy {
-        MutableLiveData<LoginUserModel>()
+class LoginViewModel : ViewModel() {
+
+    private val _currentUser = MutableStateFlow<LoginUserModel?>(null)
+    val currentUser = _currentUser.asStateFlow()
+
+    fun updateUser(user: LoginUserModel) {
+        _currentUser.update {
+            user
+        }
     }
-
 }
