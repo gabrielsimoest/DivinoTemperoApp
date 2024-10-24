@@ -1,5 +1,6 @@
 package com.example.kotlinfoodorder.ui.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -21,12 +22,19 @@ class RegisterActivity : ComponentActivity() {
         setContentView(binding.root)
 
         val registryObserver = Observer<RegisterUserModel> { registry ->
-            binding.editTextName.setText(registry.name)
-            binding.editTextEmail.setText(registry.email)
-            binding.editTextPassword.setText(registry.password)
-            binding.editTextConfirmPassword.setText(registry.confirmedPassword)
+            binding.nomeEditText.setText(registry.name)
+            binding.emailEditText.setText(registry.email)
+            binding.passwordEditText.setText(registry.password)
+            binding.confirmPasswordEditText.setText(registry.confirmedPassword)
         }
 
         model.currentRegistry.observe(this, registryObserver)
+        initLoginButtonListener();
+    }
+
+    private fun initLoginButtonListener() {
+        binding.buttonGoLogin.setOnClickListener {
+            finish()
+        }
     }
 }
