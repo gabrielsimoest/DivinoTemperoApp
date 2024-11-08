@@ -74,7 +74,7 @@ class LoginActivity : ComponentActivity() {
                         else -> {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Sem usuario encontrado",
+                                "Usuário não encontrado",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

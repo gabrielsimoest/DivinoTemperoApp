@@ -8,15 +8,16 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class RegisterViewModel : ViewModel() {
     private val _registryState = MutableStateFlow<RegistryState>(RegistryState.NotSuccess)
-    val registryState: StateFlow<RegistryState> get() = _registryState
+    val registryState = _registryState.asStateFlow()
 
     private val _currentRegistry = MutableStateFlow<RegisterUserModel?>(null)
-    val currentRegistry: StateFlow<RegisterUserModel?> get() = _currentRegistry
+    val currentRegistry = _currentRegistry.asStateFlow()
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 

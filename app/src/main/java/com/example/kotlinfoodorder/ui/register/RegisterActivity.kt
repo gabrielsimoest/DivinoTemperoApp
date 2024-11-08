@@ -91,11 +91,11 @@ class RegisterActivity : ComponentActivity() {
             val password = binding.passwordEditText.text.toString()
             val confirmPassword = binding.confirmPasswordEditText.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (name.isEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                 viewModel.register(name, email, password, confirmPassword)
             } else {
                 if (name.isEmpty()) {
-                    binding.emailEditText.error = "Por favor, insira um nome."
+                    binding.nomeEditText.error = "Por favor, insira um nome."
                 }
                 if (email.isEmpty()) {
                     binding.emailEditText.error = "Por favor, insira um email."
@@ -104,7 +104,7 @@ class RegisterActivity : ComponentActivity() {
                     binding.passwordEditText.error = "Por favor, insira uma senha."
                 }
                 if (confirmPassword.isEmpty()) {
-                    binding.passwordEditText.error = "Por favor, insira uma senha."
+                    binding.confirmPasswordEditText.error = "Por favor, insira uma senha."
                 }
             }
         }
