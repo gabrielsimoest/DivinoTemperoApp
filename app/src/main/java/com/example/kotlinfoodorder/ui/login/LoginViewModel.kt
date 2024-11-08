@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-
     private val _currentUser = MutableStateFlow<LoginUserModel?>(null)
     val currentUser = _currentUser.asStateFlow()
 
