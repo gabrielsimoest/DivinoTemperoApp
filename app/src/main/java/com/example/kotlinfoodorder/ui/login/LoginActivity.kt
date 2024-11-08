@@ -2,6 +2,7 @@ package com.example.kotlinfoodorder.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.kotlinfoodorder.databinding.ActivityLoginBinding
+import com.example.kotlinfoodorder.ui.menu.MenuActivity
 import com.example.kotlinfoodorder.ui.register.RegisterActivity
 import kotlinx.coroutines.launch
 
@@ -41,6 +43,45 @@ class LoginActivity : ComponentActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loginState.collect { state ->
+                    when (state) {
+                        is LoginViewModel.LoginState.Loading -> {
+                        }
+
+                        is LoginViewModel.LoginState.Success -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Login bem-sucedido",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            val intent = Intent(this@LoginActivity, MenuActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+
+                        is LoginViewModel.LoginState.Error -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Erro: ${state.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Sem usuario encontrado",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initButtonListeners() {
@@ -54,7 +95,7 @@ class LoginActivity : ComponentActivity() {
             val password = binding.passwordEditText.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-//                viewModel.login(email, password)
+                viewModel.login(email, password)
             } else {
                 if (email.isEmpty()) {
                     binding.emailEditText.error = "Por favor, insira um email."
