@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.kotlinfoodorder.databinding.ActivityLoginBinding
+import com.example.kotlinfoodorder.ui.forgotpassword.ForgotPasswordActivity
 import com.example.kotlinfoodorder.ui.menu.MenuActivity
 import com.example.kotlinfoodorder.ui.register.RegisterActivity
 import kotlinx.coroutines.launch
@@ -87,6 +88,7 @@ class LoginActivity : ComponentActivity() {
     private fun initButtonListeners() {
         initLoginButtonListener()
         initRegistryButtonListener()
+        initForgotPasswordButtonListener()
     }
 
     private fun initLoginButtonListener() {
@@ -110,6 +112,13 @@ class LoginActivity : ComponentActivity() {
     private fun initRegistryButtonListener() {
         binding.buttonRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun initForgotPasswordButtonListener() {
+        binding.forgotPasswordButton.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
     }

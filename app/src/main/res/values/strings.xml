@@ -9,4 +9,5 @@
     <string name="action_sign_in">Entrar</string>
     <string name="no_account_question">Não tem uma conta?</string>
     <string name="create_account">Criar uma conta</string>
+    <string name="forgot_password">Esqueceu a senha?</string>
 </resources>
