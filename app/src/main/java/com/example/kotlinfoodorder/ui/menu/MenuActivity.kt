@@ -1,15 +1,16 @@
 package com.example.kotlinfoodorder.ui.menu
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.viewpager2.widget.ViewPager2
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinfoodorder.databinding.ActivityMenuBinding
 import com.example.kotlinfoodorder.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+
 
 class MenuActivity : ComponentActivity() {
 
@@ -23,21 +24,22 @@ class MenuActivity : ComponentActivity() {
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configuração do ViewPager2 e do Adapter
-        val viewPager: ViewPager2 = binding.viewPager
-//        val adapter = MenuPagerAdapter(this)
-//        viewPager.adapter = adapter
+        binding.recyclerViewMenu.setLayoutManager(GridLayoutManager(this, 2))
 
-        // Configuração do TabLayout com o ViewPager
-        val tabLayout: TabLayout = binding.tabLayout
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            when (position) {
-                0 -> tab.text = "Comidas"
-                1 -> tab.text = "Bebidas"
-            }
-        }.attach()
+        val myItemList = listOf(
+            Item("Pizza Margherita", "Pizza clássica com molho de tomate, mozzarella e manjericão.", 29.90, R.drawable.ic_menu_report_image),
+            Item("Hambúrguer", "Hambúrguer com carne, queijo, alface e molho especial.", 19.90, R.drawable.ic_menu_report_image),
+            Item("Sushi", "Sushi fresco com peixe de alta qualidade e arroz temperado.", 39.90, R.drawable.ic_menu_report_image),
+            Item("Espaguete à Bolonhesa", "Massa com molho de carne e tomate, servido com queijo parmesão.", 24.90, R.drawable.ic_menu_report_image),
+            Item("Coxinha", "Coxinha de frango empanada, crocante por fora e macia por dentro.", 8.90, R.drawable.ic_menu_report_image),
+            Item("Torta de Chocolate", "Torta de chocolate com recheio cremoso e cobertura de ganache.", 12.90, R.drawable.ic_menu_report_image),
+            Item("Caipirinha", "Bebida tradicional brasileira feita com cachaça, limão e açúcar.", 15.90, R.drawable.ic_menu_report_image),
+            Item("Mojito", "Cocktail refrescante com rum, hortelã, limão e soda.", 18.90, R.drawable.ic_menu_report_image)
+        )
 
-        // Configuração do botão de logout
+        val adapter: MenuAdapter = MenuAdapter(myItemList)
+        binding.recyclerViewMenu.setAdapter(adapter)
+
         binding.logout.setOnClickListener {
             auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
