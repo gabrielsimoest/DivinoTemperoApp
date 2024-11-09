@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115526475592",
+    "project_id": "foodorder-a7367",
+    "storage_bucket": "foodorder-a7367.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115526475592:android:6c5c722bc9da21481c9d7d",
+        "android_client_info": {
+          "package_name": "com.example.kotlinfoodorder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzOAiwt23zJ0k2ICZp6mZbufPQp7vDuhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
