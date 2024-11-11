@@ -3,13 +3,18 @@ package com.example.kotlinfoodorder.ui.menu
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinfoodorder.databinding.ActivityMenuBinding
 import com.example.kotlinfoodorder.ui.login.LoginActivity
+import com.google.android.material.button.MaterialButton
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
 class MenuActivity : ComponentActivity() {
@@ -24,7 +29,12 @@ class MenuActivity : ComponentActivity() {
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerViewMenu.setLayoutManager(GridLayoutManager(this, 2))
+        binding.recyclerViewMenu.layoutManager = GridLayoutManager(this, 2)
+
+        val userName = auth.currentUser?.displayName ?: "Usuário"
+        binding.infoTextPrimary.text = "Olá, $userName"
+
+        addFilterButtons()
 
         val myItemList = listOf(
             Item("Pizza Margherita", "Pizza clássica com molho de tomate, mozzarella e manjericão.", 29.90, R.drawable.ic_menu_report_image),
@@ -37,14 +47,32 @@ class MenuActivity : ComponentActivity() {
             Item("Mojito", "Cocktail refrescante com rum, hortelã, limão e soda.", 18.90, R.drawable.ic_menu_report_image)
         )
 
-        val adapter: MenuAdapter = MenuAdapter(myItemList)
-        binding.recyclerViewMenu.setAdapter(adapter)
+        val adapter = MenuAdapter(myItemList)
+        binding.recyclerViewMenu.adapter = adapter
 
         binding.logout.setOnClickListener {
             auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun addFilterButtons() {
+        val buttonLabels = listOf("Todos", "Comidas", "Bebidas", "Sobremesas", "Outros")
+
+        buttonLabels.forEach { label ->
+            val button = MaterialButton(this).apply {
+                text = label
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 0, 16, 0)
+                }
+                setTextColor(ContextCompat.getColor(this@MenuActivity, android.R.color.white))
+            }
+            binding.filterButtonsLayoutContainer.addView(button)
         }
     }
 }

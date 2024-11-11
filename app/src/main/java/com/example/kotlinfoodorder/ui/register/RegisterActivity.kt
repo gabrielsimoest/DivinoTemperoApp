@@ -91,7 +91,7 @@ class RegisterActivity : ComponentActivity() {
             val password = binding.passwordEditText.text.toString()
             val confirmPassword = binding.confirmPasswordEditText.text.toString()
 
-            if (name.isEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                 viewModel.register(name, email, password, confirmPassword)
             } else {
                 if (name.isEmpty()) {
