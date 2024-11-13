@@ -8,7 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinfoodorder.R
 
-class MenuAdapter (private val itemList: List<Item>) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
+class MenuAdapter(
+    private val itemList: List<Item>,
+    private val onItemClick: (Item) -> Unit
+) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false)
@@ -21,6 +24,10 @@ class MenuAdapter (private val itemList: List<Item>) : RecyclerView.Adapter<Menu
         holder.itemDescription.text = item.description
         holder.itemPrice.text = "R$ ${item.price}"
         holder.imageView.setImageResource(item.imageResId)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(item)
+        }
     }
 
     override fun getItemCount(): Int {

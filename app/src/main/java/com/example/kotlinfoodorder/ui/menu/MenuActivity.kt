@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kotlinfoodorder.databinding.ActivityMenuBinding
 import com.example.kotlinfoodorder.ui.login.LoginActivity
+import com.example.kotlinfoodorder.ui.menuDetail.MenuDetailActivity
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 
@@ -46,7 +47,11 @@ class MenuActivity : ComponentActivity() {
             Item("Mojito", "Cocktail refrescante com rum, hortelã, limão e soda.", 18.90, drawable.ic_menu_report_image)
         )
 
-        val adapter = MenuAdapter(myItemList)
+        val adapter = MenuAdapter(myItemList) { item ->
+            val intent = Intent(this, MenuDetailActivity::class.java)
+//            intent.putExtra("itemName", item.name)
+            startActivity(intent)
+        }
         binding.recyclerViewMenu.adapter = adapter
 
         binding.logout.setOnClickListener {
