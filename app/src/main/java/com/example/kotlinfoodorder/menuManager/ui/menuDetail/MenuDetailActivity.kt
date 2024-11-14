@@ -2,12 +2,19 @@ package com.example.kotlinfoodorder.menuManager.ui.menuDetail
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.kotlinfoodorder.authManager.ui.login.LoginViewModel
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
 import com.example.kotlinfoodorder.menuManager.ui.menu.MenuItem
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.random.Random
 
 class MenuDetailActivity : ComponentActivity() {
     private lateinit var binding: ActivityMenuDetailBinding
+    private val viewModel: MenuDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,37 +22,24 @@ class MenuDetailActivity : ComponentActivity() {
         binding = ActivityMenuDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val item = generateRandomItem()
+        val menuItemId = intent.getIntExtra("menuItemId", -1)
+        if (menuItemId != -1) {
+            viewModel.loadMenuItem(menuItemId)
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentMenuItem.collect { item ->
+                    item?.let {
+                        binding.itemImage.setImageResource(item.imageResId)
+                        binding.itemName.text = item.name
+                        binding.itemDescription.text = item.description
+                        binding.itemPrice.setText(item.price.toString())
+                    }
+                }
+            }
+        }
 
         binding.btnBack.setOnClickListener { finish() }
-//        binding.btnAddToCart.setOnClickListener {
-//        }
-
-        binding.itemImage.setImageResource(item.imageResId)
-        binding.itemName.text = item.name
-        binding.itemDescription.text = item.description
-        binding.itemPrice.setText(item.price.toString())
-    }
-
-    private fun generateRandomItem(): MenuItem {
-        val names = listOf("Pizza", "Burger", "Pasta", "Salad", "Sushi")
-        val descriptions = listOf(
-            "Delicious and freshly made.",
-            "Perfect for any meal.",
-            "A popular choice among food lovers.",
-            "Healthy and tasty.",
-            "Authentic and flavorful."
-        )
-        val randomName = names[Random.nextInt(names.size)]
-        val randomDescription = descriptions[Random.nextInt(descriptions.size)]
-        val randomPrice = Random.nextDouble(5.0, 25.0)
-        val randomImageResId = android.R.drawable.ic_menu_report_image
-
-        return MenuItem(
-            name = randomName,
-            description = randomDescription,
-            price = randomPrice,
-            imageResId = randomImageResId
-        )
     }
 }

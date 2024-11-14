@@ -52,8 +52,6 @@ class MenuActivity : ComponentActivity() {
             }
         }
 
-        addFilterButtons()
-
         val adapter = MenuAdapter(menuItemRepository) { item ->
             navigateItemDetail(item)
         }
@@ -116,20 +114,14 @@ class MenuActivity : ComponentActivity() {
     }
 
     private fun navigateToCart() {
-        val intent = Intent(this, CartActivity::class.java)
+        val intent = Intent(this, OrderActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateItemDetail(item: MenuItem) {
         val intent = Intent(this, MenuDetailActivity::class.java)
-        intent.putExtra("itemName", item.name)
+        intent.putExtra("menuItemId", item.id)
         startActivity(intent)
-    }
-
-    private fun addFilterButtons() {
-        val buttonLabels = listOf("Todos", "Comidas", "Bebidas", "Sobremesas", "Outros")
-
-        buttonLabels
     }
 
     private fun showMessage(msg: String) {
