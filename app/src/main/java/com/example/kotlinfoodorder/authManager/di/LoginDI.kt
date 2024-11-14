@@ -1,6 +1,8 @@
 package com.example.kotlinfoodorder.authManager.di
 
+import com.example.kotlinfoodorder.authManager.ui.forgotpassword.ForgotPasswordViewModel
 import com.example.kotlinfoodorder.authManager.ui.login.LoginViewModel
+import com.example.kotlinfoodorder.authManager.ui.register.RegisterViewModel
 import com.example.kotlinfoodorder.login.data.LoginRepository
 import com.example.kotlinfoodorder.login.data.LoginRepositoryImpl
 import com.example.kotlinfoodorder.login.data.remote.LoginRemoteDatasource
@@ -20,5 +22,13 @@ val loginModule = module {
 
     viewModel {
         LoginViewModel(loginRepository = get())
+    }
+
+    viewModel {
+        ForgotPasswordViewModel(loginRepository = get())
+    }
+
+    viewModel {
+        RegisterViewModel(loginRepository = get())
     }
 }

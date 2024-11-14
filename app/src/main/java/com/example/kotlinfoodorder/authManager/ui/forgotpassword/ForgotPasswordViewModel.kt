@@ -1,42 +1,47 @@
 package com.example.kotlinfoodorder.authManager.ui.forgotpassword
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kotlinfoodorder.authManager.ui.login.LoginAction
 import com.example.kotlinfoodorder.authManager.ui.login.LoginUserModel
+import com.example.kotlinfoodorder.login.data.LoginRepository
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ForgotPasswordViewModel : ViewModel() {
-    private val _forgotState = MutableStateFlow<ForgotState>(ForgotState.Idle)
-    val forgotState = _forgotState.asStateFlow()
+class ForgotPasswordViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
 
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val _currentEmail = MutableStateFlow<String?>(null)
+    val currentEmail = _currentEmail.asStateFlow()
 
-    fun sendCode(email: String) {
-        _forgotState.value = ForgotState.Loading
-        viewModelScope.launch {
-            try {
-                auth.sendPasswordResetEmail(email)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            _forgotState.value = ForgotState.Send
-                        } else {
-                            _forgotState.value = ForgotState.Error(task.exception?.message)
-                        }
+    private val _uiAction = MutableSharedFlow<ForgotPasswordAction>()
+    val uiAction = _uiAction.asSharedFlow()
+
+    fun onRecoverPasswordClicked(emailText: String) {
+        _currentEmail.value = emailText
+
+        viewModelScope.launch(Dispatchers.IO) {
+            when {
+                emailText.isEmpty() -> {
+                    _uiAction.emit(ForgotPasswordAction.ShowErrorMessage("O campo de e-mail está vazio. Por favor, insira seu e-mail."))
+                }
+                else -> {
+                    runCatching {
+                        loginRepository.recover(emailText)
+                        _uiAction.emit(ForgotPasswordAction.ShowEmailSendMessage)
+                    }.onFailure { e ->
+                        _uiAction.emit(ForgotPasswordAction.ShowErrorMessage(e.message))
                     }
-            } catch (e: Exception) {
-                _forgotState.value = ForgotState.Error(e.message)
+                }
             }
         }
-    }
-
-    sealed class ForgotState {
-        object Idle : ForgotState()
-        object Loading : ForgotState()
-        object Send : ForgotState()
-        data class Error(val message: String?) : ForgotState()
     }
 }

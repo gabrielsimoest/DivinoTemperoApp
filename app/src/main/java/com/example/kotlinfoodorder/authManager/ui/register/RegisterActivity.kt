@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.kotlinfoodorder.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.launch
 
 class RegisterActivity : ComponentActivity() {
     private lateinit var binding: ActivityRegisterBinding
-    private val viewModel: RegisterViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,97 +22,61 @@ class RegisterActivity : ComponentActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initLoginButtonListener();
-        initObserver();
-        initRegisterButtonListener();
-    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiAction.collect { action ->
+                    executeAction(action)
+                }
+            }
+        }
 
-    private fun initObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentRegistry.collect { user ->
                     user?.let {
-                        binding.nomeEditText.error = if (!it.email.isNullOrEmpty()) null else "Por favor, insira um nome válido."
-                        binding.emailEditText.error = if (!it.email.isNullOrEmpty()) null else "Por favor, insira um email válido."
-                        binding.passwordEditText.error = if (!it.password.isNullOrEmpty()) null else "Por favor, insira uma senha válida."
-                        binding.passwordEditText.error = if (!it.password.isNullOrEmpty()) null else "Por favor, insira uma senha válida."
+                        binding.nomeEditText.error = if (it.name.isNotEmpty()) null else "Por favor, insira um nome válido."
+                        binding.emailEditText.error = if (it.email.isNotEmpty()) null else "Por favor, insira um email válido."
+                        binding.passwordEditText.error = if (it.password.isNotEmpty()) null else "Por favor, insira uma senha válida."
+                        binding.confirmPasswordEditText.error = if (it.confirmedPassword.isNotEmpty()) null else "Por favor, insira uma senha válida."
 
-                        binding.emailEditText.setText(it.name)
-                        binding.passwordEditText.setText(it.email)
+                        binding.nomeEditText.setText(it.name)
+                        binding.emailEditText.setText(it.email)
                         binding.passwordEditText.setText(it.password)
-                        binding.passwordEditText.setText(it.confirmedPassword)
+                        binding.confirmPasswordEditText.setText(it.confirmedPassword)
                     }
                 }
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.registryState.collect { state ->
-                    when (state) {
-                        is RegisterViewModel.RegistryState.Loading -> {
-                        }
+        with(binding) {
+            createAccount.setOnClickListener {
+                viewModel.onRegisterClicked(getNameText(), getEmailText(), getPasswordText(), getConfirmedPasswordText())
+            }
 
-                        is RegisterViewModel.RegistryState.Success -> {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Usuario criado com sucesso!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            finish()
-                        }
-
-                        is RegisterViewModel.RegistryState.Error -> {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Erro: ${state.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        else -> {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Sem usuario encontrado",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+            buttonGoLogin.setOnClickListener {
+                navigateLogin()
             }
         }
     }
 
-    private fun initRegisterButtonListener() {
-        binding.createAccount.setOnClickListener {
-            val name = binding.nomeEditText.text.toString()
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            val confirmPassword = binding.confirmPasswordEditText.text.toString()
-
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
-                viewModel.register(name, email, password, confirmPassword)
-            } else {
-                if (name.isEmpty()) {
-                    binding.nomeEditText.error = "Por favor, insira um nome."
-                }
-                if (email.isEmpty()) {
-                    binding.emailEditText.error = "Por favor, insira um email."
-                }
-                if (password.isEmpty()) {
-                    binding.passwordEditText.error = "Por favor, insira uma senha."
-                }
-                if (confirmPassword.isEmpty()) {
-                    binding.confirmPasswordEditText.error = "Por favor, insira uma senha."
-                }
-            }
+    private fun executeAction(action: RegisterAction) {
+        when (action) {
+            is RegisterAction.NavigateLogin -> navigateLogin()
+            is RegisterAction.ShowSuccessMessage -> showMessage("Usuário criado com sucesso!")
+            is RegisterAction.ShowErrorMessage -> showMessage(action.message ?: "Um erro aconteceu. Tente novamente.")
         }
     }
 
-    private fun initLoginButtonListener() {
-        binding.buttonGoLogin.setOnClickListener {
-            finish()
-        }
+    private fun getNameText() = binding.nomeEditText.text.toString()
+    private fun getEmailText() = binding.emailEditText.text.toString()
+    private fun getPasswordText() = binding.passwordEditText.text.toString()
+    private fun getConfirmedPasswordText() = binding.confirmPasswordEditText.text.toString()
+
+    private fun navigateLogin(){
+        finish()
+    }
+
+    private fun showMessage(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 }

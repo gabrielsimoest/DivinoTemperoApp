@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.kotlinfoodorder.databinding.ActivityLoginBinding
 import com.example.kotlinfoodorder.authManager.ui.forgotpassword.ForgotPasswordActivity
-import com.example.kotlinfoodorder.menuManager.ui.menu.MenuActivity
 import com.example.kotlinfoodorder.authManager.ui.register.RegisterActivity
 import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,17 +25,20 @@ class LoginActivity : ComponentActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initFormObserver()
-        initButtonListeners()
-    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiAction.collect { action ->
+                    executeAction(action)
+                }
+            }
+        }
 
-    private fun initFormObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentUser.collect { user ->
                     user?.let {
-                        binding.emailEditText.error = if (!it.email.isNullOrEmpty()) null else "Por favor, insira um email válido."
-                        binding.passwordEditText.error = if (!it.password.isNullOrEmpty()) null else "Por favor, insira uma senha válida."
+                        binding.emailEditText.error = if (it.email.isNotEmpty()) null else "Por favor, insira um email válido."
+                        binding.passwordEditText.error = if (it.password.isNotEmpty()) null else "Por favor, insira uma senha válida."
 
                         binding.emailEditText.setText(it.email)
                         binding.passwordEditText.setText(it.password)
@@ -45,81 +47,50 @@ class LoginActivity : ComponentActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginState.collect { state ->
-                    when (state) {
-                        is LoginViewModel.LoginState.Loading -> {
-                        }
+        viewModel.onViewCreated()
 
-                        is LoginViewModel.LoginState.Success -> {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Login bem-sucedido",
-                                Toast.LENGTH_SHORT
-                            ).show()
+        with(binding) {
+            login.setOnClickListener {
+                viewModel.onLoginClicked(getEmailText(), getPasswordText())
+            }
 
-                            val intent = Intent(this@LoginActivity, MenuActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
+            buttonRegister.setOnClickListener {
+                navigateRegister()
+            }
 
-                        is LoginViewModel.LoginState.Error -> {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Erro: ${state.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        else -> {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Usuário não encontrado",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+            forgotPasswordButton.setOnClickListener {
+                navigateForgotPassword()
             }
         }
     }
 
-    private fun initButtonListeners() {
-        initLoginButtonListener()
-        initRegistryButtonListener()
-        initForgotPasswordButtonListener()
-    }
-
-    private fun initLoginButtonListener() {
-        binding.login.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.login(email, password)
-            } else {
-                if (email.isEmpty()) {
-                    binding.emailEditText.error = "Por favor, insira um email."
-                }
-                if (password.isEmpty()) {
-                    binding.passwordEditText.error = "Por favor, insira uma senha."
-                }
-            }
+    private fun executeAction(action: LoginAction) {
+        when (action) {
+            is LoginAction.NavigateHome -> navigateHome()
+            is LoginAction.ShowErrorMessage -> showMessage(action.message ?: "Um erro aconteceu. Tente novamente.")
         }
     }
 
-    private fun initRegistryButtonListener() {
-        binding.buttonRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
+    private fun navigateHome() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
-    private fun initForgotPasswordButtonListener() {
-        binding.forgotPasswordButton.setOnClickListener {
-            val intent = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(intent)
-        }
+    private fun navigateRegister() {
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun navigateForgotPassword() {
+        val intent = Intent(this, ForgotPasswordActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun getEmailText() = binding.emailEditText.text.toString()
+    private fun getPasswordText() = binding.passwordEditText.text.toString()
+
+    private fun showMessage(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 }
