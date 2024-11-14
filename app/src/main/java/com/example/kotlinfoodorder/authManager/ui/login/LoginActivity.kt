@@ -12,6 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.kotlinfoodorder.databinding.ActivityLoginBinding
 import com.example.kotlinfoodorder.authManager.ui.forgotpassword.ForgotPasswordActivity
 import com.example.kotlinfoodorder.authManager.ui.register.RegisterActivity
+import com.example.kotlinfoodorder.menuManager.ui.menu.MenuActivity
 import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
@@ -35,6 +36,12 @@ class LoginActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.onViewCreated()
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentUser.collect { user ->
                     user?.let {
                         binding.emailEditText.error = if (it.email.isNotEmpty()) null else "Por favor, insira um email válido."
@@ -46,8 +53,6 @@ class LoginActivity : ComponentActivity() {
                 }
             }
         }
-
-        viewModel.onViewCreated()
 
         with(binding) {
             login.setOnClickListener {
@@ -66,13 +71,13 @@ class LoginActivity : ComponentActivity() {
 
     private fun executeAction(action: LoginAction) {
         when (action) {
-            is LoginAction.NavigateHome -> navigateHome()
+            is LoginAction.NavigateMenu -> navigateMenu()
             is LoginAction.ShowErrorMessage -> showMessage(action.message ?: "Um erro aconteceu. Tente novamente.")
         }
     }
 
-    private fun navigateHome() {
-        val intent = Intent(this, LoginActivity::class.java)
+    private fun navigateMenu() {
+        val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }

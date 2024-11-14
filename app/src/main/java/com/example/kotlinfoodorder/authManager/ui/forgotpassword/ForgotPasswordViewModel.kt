@@ -1,22 +1,17 @@
 package com.example.kotlinfoodorder.authManager.ui.forgotpassword
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kotlinfoodorder.authManager.ui.login.LoginAction
-import com.example.kotlinfoodorder.authManager.ui.login.LoginUserModel
-import com.example.kotlinfoodorder.login.data.LoginRepository
-import com.google.firebase.auth.FirebaseAuth
+import com.example.kotlinfoodorder.login.data.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel(
-    private val loginRepository: LoginRepository
+    private val loginRepository: UserRepository
 ) : ViewModel() {
 
     private val _currentEmail = MutableStateFlow<String?>(null)

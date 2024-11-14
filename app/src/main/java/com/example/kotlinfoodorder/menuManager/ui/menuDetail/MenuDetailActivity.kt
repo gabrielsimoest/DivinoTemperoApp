@@ -3,7 +3,7 @@ package com.example.kotlinfoodorder.menuManager.ui.menuDetail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
-import com.example.kotlinfoodorder.menuManager.ui.menu.Item
+import com.example.kotlinfoodorder.menuManager.ui.menu.MenuItem
 import kotlin.random.Random
 
 class MenuDetailActivity : ComponentActivity() {
@@ -27,7 +27,7 @@ class MenuDetailActivity : ComponentActivity() {
         binding.itemPrice.setText(item.price.toString())
     }
 
-    private fun generateRandomItem(): Item {
+    private fun generateRandomItem(): MenuItem {
         val names = listOf("Pizza", "Burger", "Pasta", "Salad", "Sushi")
         val descriptions = listOf(
             "Delicious and freshly made.",
@@ -41,7 +41,7 @@ class MenuDetailActivity : ComponentActivity() {
         val randomPrice = Random.nextDouble(5.0, 25.0)
         val randomImageResId = android.R.drawable.ic_menu_report_image
 
-        return Item(
+        return MenuItem(
             name = randomName,
             description = randomDescription,
             price = randomPrice,

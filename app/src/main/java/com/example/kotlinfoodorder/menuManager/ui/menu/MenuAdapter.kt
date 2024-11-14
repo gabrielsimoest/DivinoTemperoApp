@@ -7,11 +7,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinfoodorder.R
+import com.example.kotlinfoodorder.login.data.MenuItemRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MenuAdapter(
-    private val itemList: List<Item>,
-    private val onItemClick: (Item) -> Unit
+    private val menuItemRepository: MenuItemRepository,
+    private val onItemClick: (MenuItem) -> Unit
 ) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
+
+    private var itemList = listOf<MenuItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false)
@@ -32,6 +39,15 @@ class MenuAdapter(
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    fun loadItems() {
+        CoroutineScope(Dispatchers.Main).launch {
+            itemList = withContext(Dispatchers.IO) {
+                menuItemRepository.getMenuItems()
+            }
+            notifyDataSetChanged()
+        }
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
