@@ -4,92 +4,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="?android:attr/windowBackground">
+    android:background="?attr/colorPrimary">
 
-    <!-- Botão de Voltar -->
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/btnBack"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Voltar"
+        android:src="@drawable/arrow_back_ios_24px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cartHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/arrow_back_ios_24px"
-        android:iconTint="@android:color/white"
-        android:text="Voltar"
-        android:textColor="@android:color/white"
-        android:backgroundTint="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="Voltar"
-        app:iconPadding="8dp"
-        android:padding="8dp" />
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="40dp"
+        android:text="Item"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintStart_toStartOf="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Imagem do Item -->
-    <ImageView
-        android:id="@+id/itemImage"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="24dp"
-        android:contentDescription="Imagem do item"
-        android:scaleType="centerCrop"
-        tools:srcCompat="@drawable/background_gradient"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cart"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="32dp"
+        android:text="0"
+        app:icon="@drawable/shopping_cart_24dp"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toEndOf="@+id/cartHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintTop_toBottomOf="@id/cartHeader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:clipToOutline="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:elevation="4dp"
-        android:outlineProvider="background" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- Container Vertical para o Texto -->
-    <LinearLayout
-        android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="Imagem do item"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/icon_background"
+            android:clipToOutline="true"
+            android:elevation="4dp"
+            android:outlineProvider="background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/itemImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/itemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:paddingBottom="8dp"
+                tools:text="Nome do Item" />
+
+            <TextView
+                android:id="@+id/itemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textColor="?android:attr/textColorSecondary"
+                android:lineSpacingExtra="4dp"
+                android:paddingBottom="16dp"
+                tools:text="Descrição detalhada do item." />
+
+            <TextView
+                android:id="@+id/itemPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorAccent"
+                android:paddingTop="8dp"
+                android:gravity="center"
+                tools:text="R$ 99,99" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnCheckout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/itemImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Nome do Item -->
-        <TextView
-            android:id="@+id/itemName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textAlignment="center"
-            tools:text="Nome do Item"
-            android:paddingBottom="8dp"/>
-
-        <!-- Descrição do Item -->
-        <TextView
-            android:id="@+id/itemDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:lineSpacingExtra="4dp"
-            android:paddingBottom="16dp"
-            tools:text="Descrição detalhada do item." />
-
-        <!-- Preço do Item -->
-        <TextView
-            android:id="@+id/itemPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorAccent"
-            android:paddingTop="8dp"
-            android:gravity="center"
-            tools:text="R$ 99,99" />
-    </LinearLayout>
+        android:layout_margin="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Adicionar ao Pedido"
+        android:textColor="@android:color/white"
+        app:backgroundTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
