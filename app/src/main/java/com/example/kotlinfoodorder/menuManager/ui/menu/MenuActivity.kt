@@ -52,9 +52,20 @@ class MenuActivity : ComponentActivity() {
             }
         }
 
-        val adapter = MenuAdapter(menuItemRepository) { item ->
-            navigateItemDetail(item)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentOrder.collect { order ->
+                    order.toString().also { binding.order.text = it }
+                }
+            }
         }
+
+        val adapter = MenuAdapter(
+            menuItemRepository,
+            onItemClick = { item -> navigateItemDetail(item) },
+            onAddItemClick = { item -> addItemToCart(item) }
+        )
+
 
         with(binding) {
             recyclerViewMenu.layoutManager = GridLayoutManager(this@MenuActivity, 2)
@@ -68,13 +79,16 @@ class MenuActivity : ComponentActivity() {
                 viewModel.logout()
             }
 
-            cart.setOnClickListener {
+            order.setOnClickListener {
                 navigateToCart()
             }
 
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.currentCategories.collect { category ->
+
+                        binding.filterButtonsLayoutContainer.removeAllViews() //Adicionando os botões de categorias sempre que volta para a pagina novamente?
+
                         category?.forEach { label ->
                             val button = MaterialButton(this@MenuActivity).apply {
                                 text = label.name
@@ -84,18 +98,21 @@ class MenuActivity : ComponentActivity() {
                                 ).apply {
                                     setMargins(16, 0, 16, 0)
                                 }
+                                setOnClickListener {
+                                    if (label.name == "Todos") {
+                                        adapter.filterItems { true }
+                                    } else {
+                                        adapter.filterItems { menuItem ->
+                                            menuItem.categoryId == label.id
+                                        }
+                                    }
+                                }
                                 setTextColor(ContextCompat.getColor(this@MenuActivity, color.white))
                             }
                             binding.filterButtonsLayoutContainer.addView(button)
                         }
                     }
                 }
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.onViewCreated()
             }
         }
     }
@@ -105,6 +122,11 @@ class MenuActivity : ComponentActivity() {
             is MenuAction.NavigateHome -> navigateHome()
             is MenuAction.ShowErrorMessage -> showMessage(action.message ?: "Um erro aconteceu. Tente novamente.")
         }
+    }
+
+    private fun addItemToCart(item: MenuItem) {
+        viewModel.addItemToOrder(item.id)
+        Toast.makeText(this, "${item.name} adicionado ao pedido!", Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateHome() {

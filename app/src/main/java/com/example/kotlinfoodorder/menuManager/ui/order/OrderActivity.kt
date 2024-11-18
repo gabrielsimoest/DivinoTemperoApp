@@ -34,5 +34,7 @@ class OrderActivity : ComponentActivity() {
 
         val adapter = OrderAdapter(myItemList)
         binding.recyclerViewMenu.adapter = adapter
+
+        binding.btnBack.setOnClickListener { finish() }
     }
 }

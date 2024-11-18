@@ -40,6 +40,14 @@ class MenuDetailActivity : ComponentActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentOrder.collect { order ->
+                    order.toString().also { binding.order.text = it }
+                }
+            }
+        }
+
         binding.btnBack.setOnClickListener { finish() }
     }
 }

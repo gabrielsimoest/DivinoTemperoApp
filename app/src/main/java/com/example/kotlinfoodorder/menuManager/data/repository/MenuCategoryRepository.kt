@@ -1,4 +1,4 @@
-package com.example.kotlinfoodorder.login.data
+package com.example.kotlinfoodorder.menuManager.data.repository
 
 import com.example.kotlinfoodorder.menuManager.ui.menu.MenuCategoryModel
 
