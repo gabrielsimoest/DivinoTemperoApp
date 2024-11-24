@@ -12,27 +12,27 @@
         android:theme="@style/Theme.KotlinFoodOrder"
         tools:targetApi="31">
         <activity
-            android:name="com.example.kotlinfoodorder.authManager.ui.register.RegisterActivity"
+            android:name="com.example.kotlinfoodorder.auth.ui.register.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.KotlinFoodOrder" />
         <activity
-            android:name="com.example.kotlinfoodorder.authManager.ui.forgotpassword.ForgotPasswordActivity"
+            android:name="com.example.kotlinfoodorder.auth.ui.forgotpassword.ForgotPasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.KotlinFoodOrder" />
         <activity
-            android:name="com.example.kotlinfoodorder.menuManager.ui.menu.MenuActivity"
+            android:name="com.example.kotlinfoodorder.menu.ui.menu.MenuActivity"
             android:exported="false"
             android:theme="@style/Theme.KotlinFoodOrder" />
         <activity
-            android:name="com.example.kotlinfoodorder.menuManager.ui.menu.OrderActivity"
+            android:name="com.example.kotlinfoodorder.menu.ui.menu.OrderActivity"
             android:exported="false"
             android:theme="@style/Theme.KotlinFoodOrder" />
         <activity
-            android:name="com.example.kotlinfoodorder.menuManager.ui.menuDetail.MenuDetailActivity"
+            android:name="com.example.kotlinfoodorder.menu.ui.menuDetail.MenuDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.KotlinFoodOrder" />
         <activity
-            android:name="com.example.kotlinfoodorder.authManager.ui.login.LoginActivity"
+            android:name="com.example.kotlinfoodorder.auth.ui.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
