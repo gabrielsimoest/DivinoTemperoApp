@@ -54,7 +54,7 @@ class MenuViewModel(
 
     fun logout(){
         viewModelScope.launch {
-            loginRepository.logout();
+            loginRepository.logout()
             _uiAction.emit(MenuAction.NavigateHome)
         }
     }

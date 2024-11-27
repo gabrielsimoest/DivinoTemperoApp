@@ -20,7 +20,7 @@ class MenuDetailViewModel(
     val currentMenuItem = _currentMenuItem.asStateFlow()
 
     private val _currentUser = MutableStateFlow<User?>(null)
-    val currentUser = _currentUser.asStateFlow()
+//    val currentUser = _currentUser.asStateFlow()
 
     private val _currentOrder = MutableStateFlow(0)
     val currentOrder = _currentOrder.asStateFlow()

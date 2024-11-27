@@ -49,7 +49,7 @@ class MenuActivity : ComponentActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentUser.collect { user ->
                     user?.let {
-                        binding.infoTextPrimary.text = "Olá, ${user.displayName}"
+                        binding.infoTextPrimary.text = String.format("Olá,  ${user.displayName}")
                     }
                 }
             }

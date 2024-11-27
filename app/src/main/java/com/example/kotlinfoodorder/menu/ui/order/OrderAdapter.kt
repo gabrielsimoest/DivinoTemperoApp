@@ -39,14 +39,14 @@ class OrderAdapter(
         holder.itemName.text = item.name
         holder.itemPrice.text = currencyFormat.format(item.price * item.quantity)
         holder.imageView.setImageResource(item.imageResId)
-        holder.itemQuantity.text = item.quantity.toString()
+        holder.itemQuantity.text = String.format(item.quantity.toString())
 
         holder.addButton.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 orderRepository.addItemToOrder(userId, item.id)
 
                 item.quantity++
-                holder.itemQuantity.text = item.quantity.toString()
+                holder.itemQuantity.text = String.format(item.quantity.toString())
                 holder.itemPrice.text = currencyFormat.format(item.price * item.quantity)
                 notifyItemChanged(position)
                 updateOrderTotal()
@@ -59,7 +59,7 @@ class OrderAdapter(
 
                 if (item.quantity > 1) {
                     item.quantity--
-                    holder.itemQuantity.text = item.quantity.toString()
+                    holder.itemQuantity.text = String.format(item.quantity.toString())
                     holder.itemPrice.text = currencyFormat.format(item.price * item.quantity)
                     notifyItemChanged(position)
                 } else {
