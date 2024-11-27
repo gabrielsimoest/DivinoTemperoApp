@@ -1,10 +1,10 @@
 package com.example.kotlinfoodorder.menu.data.repository
 
-import android.R
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.menu.data.remote.MenuItemRemoteDatasource
-import com.example.kotlinfoodorder.menu.ui.menu.MenuItem
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.kotlinfoodorder.menu.model.OrderItem
+import com.example.kotlinfoodorder.menu.model.OrderModel
+import com.example.kotlinfoodorder.menu.model.MenuItem
 
 class MenuItemRepositoryImpl(
     private val menuItemRemoteDatasource: MenuItemRemoteDatasource
@@ -14,7 +14,10 @@ class MenuItemRepositoryImpl(
     }
 
     override suspend fun getMenuItem(id: String): MenuItem? {
-//        return inMemoryTempList.find { it.id == id } ?: throw NoSuchElementException("Item with ID $id not found.")
         return menuItemRemoteDatasource.getMenuItem(id)
+    }
+
+    override suspend fun getMenuOrderItems(orders: List<OrderModel>): List<OrderItem>? {
+        return menuItemRemoteDatasource.getMenuOrderItems(orders)
     }
 }

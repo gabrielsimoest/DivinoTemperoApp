@@ -1,6 +1,7 @@
 package com.example.kotlinfoodorder.menu.model
 
 data class OrderModel(
-    val userId: Int,
-    val items: MutableList<Int>
+    var userId: String = "",
+    var menuId: String = "",
+    var quantity: Int = 0
 )

@@ -69,7 +69,6 @@
             android:contentDescription="Imagem do item"
             android:scaleType="centerCrop"
             tools:srcCompat="@drawable/icon_background"
-            android:clipToOutline="true"
             android:elevation="4dp"
             android:outlineProvider="background"
             app:layout_constraintTop_toTopOf="parent"
@@ -123,15 +122,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnCheckout"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddItem"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginBottom="20dp"
         android:text="Adicionar ao Pedido"
-        android:textColor="@android:color/white"
-        app:backgroundTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

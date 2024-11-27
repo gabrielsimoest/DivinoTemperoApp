@@ -8,10 +8,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.NumberFormat
+import java.util.Locale
 
 class MenuDetailActivity : ComponentActivity() {
     private lateinit var binding: ActivityMenuDetailBinding
     private val viewModel: MenuDetailViewModel by viewModel()
+
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +26,8 @@ class MenuDetailActivity : ComponentActivity() {
         val menuItemId = intent.getStringExtra("menuItemId") ?: "-1"
         if (menuItemId != "-1") {
             viewModel.loadMenuItem(menuItemId)
+
+            binding.btnAddItem.setOnClickListener{ viewModel.addItemToOrder(menuItemId) }
         }
 
         lifecycleScope.launch {
@@ -31,7 +37,7 @@ class MenuDetailActivity : ComponentActivity() {
                         binding.itemImage.setImageResource(item.imageResId)
                         binding.itemName.text = item.name
                         binding.itemDescription.text = item.description
-                        binding.itemPrice.setText(item.price.toString())
+                        binding.itemPrice.text = currencyFormat.format(item.price)
                     }
                 }
             }

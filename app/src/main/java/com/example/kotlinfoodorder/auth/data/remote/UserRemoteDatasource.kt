@@ -1,4 +1,4 @@
-package com.example.kotlinfoodorder.login.data.remote
+package com.example.kotlinfoodorder.auth.data.remote
 
 import com.example.kotlinfoodorder.login.model.User
 

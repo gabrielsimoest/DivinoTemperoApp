@@ -6,7 +6,7 @@ import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.login.data.UserRepository
 import com.example.kotlinfoodorder.login.model.User
 import com.example.kotlinfoodorder.menu.data.repository.OrderRepository
-import com.example.kotlinfoodorder.menu.ui.menu.MenuItem
+import com.example.kotlinfoodorder.menu.model.MenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ class MenuDetailViewModel(
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser = _currentUser.asStateFlow()
 
-    private val _currentOrder = MutableStateFlow<Int>(0)
+    private val _currentOrder = MutableStateFlow(0)
     val currentOrder = _currentOrder.asStateFlow()
 
     init {
@@ -44,10 +44,10 @@ class MenuDetailViewModel(
     fun addItemToOrder(itemId: String) {
         val user = _currentUser.value
         if (user != null) {
-            orderRepository.addItemToOrder(userId = user.uid, itemId = itemId)
-
-            val orderNumberOfItems = orderRepository.getOrderNumberOfItems(user.uid)
-            _currentOrder.value = orderNumberOfItems
+            viewModelScope.launch {
+                orderRepository.addItemToOrder(user.uid, itemId)
+                _currentOrder.value = orderRepository.getOrderNumberOfItems(user.uid)
+            }
         }
     }
 }

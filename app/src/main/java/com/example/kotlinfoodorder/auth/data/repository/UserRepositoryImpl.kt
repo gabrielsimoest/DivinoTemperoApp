@@ -1,6 +1,6 @@
 package com.example.kotlinfoodorder.login.data
 
-import com.example.kotlinfoodorder.login.data.remote.UserRemoteDatasource
+import com.example.kotlinfoodorder.auth.data.remote.UserRemoteDatasource
 import com.example.kotlinfoodorder.login.model.User
 
 class UserRepositoryImpl(

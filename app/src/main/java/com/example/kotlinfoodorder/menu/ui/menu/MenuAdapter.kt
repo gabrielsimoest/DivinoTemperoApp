@@ -8,17 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
+import com.example.kotlinfoodorder.menu.model.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.NumberFormat
+import java.util.Locale
 
 class MenuAdapter(
     private val menuItemRepository: MenuItemRepository,
     private val onItemClick: (MenuItem) -> Unit,
     private val onAddItemClick: (MenuItem) -> Unit
 ) : RecyclerView.Adapter<MenuAdapter.MyViewHolder>() {
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 
     private var itemList = listOf<MenuItem>()
     private var filteredItemList = listOf<MenuItem>()
@@ -32,7 +36,7 @@ class MenuAdapter(
         val item = filteredItemList[position]
         holder.itemName.text = item.name
         holder.itemDescription.text = item.description
-        holder.itemPrice.text = "R$ ${item.price}"
+        holder.itemPrice.text = currencyFormat.format(item.price)
         holder.imageView.setImageResource(item.imageResId)
 
         holder.itemView.setOnClickListener {

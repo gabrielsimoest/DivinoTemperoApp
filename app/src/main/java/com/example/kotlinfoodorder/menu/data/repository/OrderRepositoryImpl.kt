@@ -1,19 +1,24 @@
 package com.example.kotlinfoodorder.menu.data.repository;
 
-class OrderRepositoryImpl : OrderRepository {
-    private val orders: MutableMap<String, MutableList<String>> = mutableMapOf()
+import com.example.kotlinfoodorder.menu.data.remote.MenuItemRemoteDatasource
+import com.example.kotlinfoodorder.menu.model.OrderModel
 
-    override fun addItemToOrder(userId: String, itemId: String) {
-        val userOrder = orders.getOrPut(userId) { mutableListOf() }
-        userOrder.add(itemId)
+class OrderRepositoryImpl(
+    private val menuItemRemoteDatasource: MenuItemRemoteDatasource
+) : OrderRepository {
+    override suspend fun addItemToOrder(userId: String, itemId: String) {
+        menuItemRemoteDatasource.addOrderItem(userId, itemId);
     }
 
-    override fun removeItemFromOrder(userId: String, itemId: String): Boolean {
-        val userOrder = orders[userId]
-        return userOrder?.remove(itemId) ?: false
+    override suspend fun removeItemFromOrder(userId: String, itemId: String) {
+        menuItemRemoteDatasource.removeOrderItem(userId, itemId);
     }
 
-    override fun getOrderNumberOfItems(userId: String): Int {
-        return orders[userId]?.size ?: 0
+    override suspend fun getOrderNumberOfItems(userId: String): Int {
+        return menuItemRemoteDatasource.getOrderNumberOfItems(userId)
+    }
+
+    override suspend fun getOrderItems(userId: String): List<OrderModel> {
+        return menuItemRemoteDatasource.getOrderItems(userId)
     }
 }

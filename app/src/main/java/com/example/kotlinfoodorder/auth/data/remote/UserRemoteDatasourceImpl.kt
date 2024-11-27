@@ -1,5 +1,7 @@
 package com.example.kotlinfoodorder.login.data.remote
 
+import com.example.kotlinfoodorder.auth.data.remote.UserNotFoundException
+import com.example.kotlinfoodorder.auth.data.remote.UserRemoteDatasource
 import com.example.kotlinfoodorder.login.model.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth

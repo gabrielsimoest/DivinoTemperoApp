@@ -34,16 +34,21 @@ class MenuViewModel(
         viewModelScope.launch {
             _currentUser.value = loginRepository.getCurrentUserInfo()
             _currentCategories.value = menuCategoryRepository.getMenuCategories()
+            val user = _currentUser.value
+            if (user != null)
+                _currentOrder.value = orderRepository.getOrderNumberOfItems(user.uid)
         }
     }
 
     fun addItemToOrder(itemId: String) {
         val user = _currentUser.value
         if (user != null) {
-            orderRepository.addItemToOrder(userId = user.uid, itemId = itemId)
+            viewModelScope.launch {
+                orderRepository.addItemToOrder(userId = user.uid, itemId = itemId)
 
-            val orderNumberOfItems = orderRepository.getOrderNumberOfItems(user.uid)
-            _currentOrder.value = orderNumberOfItems
+                val orderNumberOfItems = orderRepository.getOrderNumberOfItems(user.uid)
+                _currentOrder.value = orderNumberOfItems
+            }
         }
     }
 

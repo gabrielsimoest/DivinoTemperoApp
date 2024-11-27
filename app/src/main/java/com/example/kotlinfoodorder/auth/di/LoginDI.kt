@@ -5,7 +5,7 @@ import com.example.kotlinfoodorder.auth.ui.login.LoginViewModel
 import com.example.kotlinfoodorder.auth.ui.register.RegisterViewModel
 import com.example.kotlinfoodorder.login.data.UserRepository
 import com.example.kotlinfoodorder.login.data.UserRepositoryImpl
-import com.example.kotlinfoodorder.login.data.remote.UserRemoteDatasource
+import com.example.kotlinfoodorder.auth.data.remote.UserRemoteDatasource
 import com.example.kotlinfoodorder.login.data.remote.UserRemoteDatasourceImpl
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.dsl.viewModel

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kotlinfoodorder.databinding.ActivityMenuBinding
 import com.example.kotlinfoodorder.auth.ui.login.LoginActivity
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
+import com.example.kotlinfoodorder.menu.model.MenuItem
 import com.example.kotlinfoodorder.menu.ui.menuDetail.MenuDetailActivity
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
@@ -90,8 +91,8 @@ class MenuActivity : ComponentActivity() {
                     viewModel.currentCategories.collect { categories ->
 
                         categories?.forEach { category ->
-                            if (!addedCategoryIds.contains(category.id.toString())) {
-                                addedCategoryIds.add(category.id.toString())
+                            if (!addedCategoryIds.contains(category.id)) {
+                                addedCategoryIds.add(category.id)
 
                                 val button = MaterialButton(this@MenuActivity).apply {
                                     text = category.name

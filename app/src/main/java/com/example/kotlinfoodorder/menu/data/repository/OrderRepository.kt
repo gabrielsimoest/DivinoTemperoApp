@@ -1,9 +1,13 @@
 package com.example.kotlinfoodorder.menu.data.repository
 
+import com.example.kotlinfoodorder.menu.model.OrderModel
+
 interface OrderRepository {
-    fun addItemToOrder(userId: String, itemId: String)
+    suspend fun addItemToOrder(userId: String, itemId: String)
 
-    fun removeItemFromOrder(userId: String, itemId: String): Boolean
+    suspend fun removeItemFromOrder(userId: String, itemId: String)
 
-    fun getOrderNumberOfItems(userId: String): Int
+    suspend fun getOrderNumberOfItems(userId: String): Int
+
+    suspend fun getOrderItems(userId: String): List<OrderModel>
 }
