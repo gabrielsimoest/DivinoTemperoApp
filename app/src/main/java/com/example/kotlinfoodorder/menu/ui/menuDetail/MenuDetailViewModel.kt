@@ -22,16 +22,13 @@ class MenuDetailViewModel(
     private val _currentUser = MutableStateFlow<User?>(null)
 //    val currentUser = _currentUser.asStateFlow()
 
-    private val _currentOrder = MutableStateFlow(0)
-    val currentOrder = _currentOrder.asStateFlow()
+    val currentOrder = orderRepository.getOrderNumberOfItems()
 
     init {
         viewModelScope.launch {
             val user = loginRepository.getCurrentUserInfo()
 
             _currentUser.value = user
-            val orderNumberOfItems = orderRepository.getOrderNumberOfItems(user.uid)
-            _currentOrder.value = orderNumberOfItems
         }
     }
 
@@ -46,7 +43,6 @@ class MenuDetailViewModel(
         if (user != null) {
             viewModelScope.launch {
                 orderRepository.addItemToOrder(user.uid, itemId)
-                _currentOrder.value = orderRepository.getOrderNumberOfItems(user.uid)
             }
         }
     }

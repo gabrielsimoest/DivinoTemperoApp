@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="@color/third_color">
 
     <ImageButton
         android:id="@+id/btnBack"
@@ -43,6 +43,7 @@
         android:layout_marginTop="32dp"
         android:text="0"
         app:icon="@drawable/shopping_cart_24dp"
+        app:backgroundTint="@color/primary_color"
         app:iconGravity="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -90,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="@color/primary_text_color"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textAlignment="center"
@@ -103,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textAlignment="center"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="@color/primary_text_color"
                 android:lineSpacingExtra="4dp"
                 android:paddingBottom="16dp"
                 tools:text="Descrição detalhada do item." />
@@ -114,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorAccent"
+                android:textColor="@color/primary_text_color"
                 android:paddingTop="8dp"
                 android:gravity="center"
                 tools:text="R$ 99,99" />
@@ -125,6 +126,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddItem"
         style="@style/Widget.MaterialComponents.Button"
+        app:backgroundTint="@color/primary_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

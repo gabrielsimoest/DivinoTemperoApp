@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorPrimary"
+    android:background="@color/third_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -65,6 +65,7 @@
                     android:layout_marginBottom="16dp"
                     android:text="Total: R$ 0,00"
                     android:textSize="16sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintBottom_toTopOf="@id/btnCheckout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:layout_marginBottom="20dp"
+                    app:backgroundTint="@color/primary_color"
                     android:text="Realizar Pedido"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

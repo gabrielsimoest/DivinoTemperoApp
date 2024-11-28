@@ -3,6 +3,8 @@ package com.example.kotlinfoodorder.auth.di
 import com.example.kotlinfoodorder.menu.data.repository.MenuCategoryRepository
 import com.example.kotlinfoodorder.menu.data.repository.MenuCategoryRepositoryImpl
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
+import com.example.kotlinfoodorder.menu.data.memory.CurrentOrderDataSource
+import com.example.kotlinfoodorder.menu.data.memory.CurrentOrderDataSourceImpl
 import com.example.kotlinfoodorder.menu.data.remote.MenuItemRemoteDatasource
 import com.example.kotlinfoodorder.menu.data.remote.MenuItemRemoteDatasourceImpl
 import com.example.kotlinfoodorder.menu.data.repository.MenuItemRepositoryImpl
@@ -34,7 +36,11 @@ val menuModule = module {
     }
 
     factory<OrderRepository> {
-        OrderRepositoryImpl(menuItemRemoteDatasource = get())
+        OrderRepositoryImpl(menuItemRemoteDatasource = get(), currentOrderDataSource = get())
+    }
+
+    single<CurrentOrderDataSource> {
+        CurrentOrderDataSourceImpl(loginRepository = get(), menuItemRemoteDatasource = get())
     }
 
     viewModel {

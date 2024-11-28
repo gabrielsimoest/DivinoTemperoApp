@@ -18,8 +18,7 @@ class MenuViewModel(
     private val menuCategoryRepository: MenuCategoryRepository,
     private val orderRepository: OrderRepository
 ) : ViewModel() {
-    private val _currentOrder = MutableStateFlow<Int>(0)
-    val currentOrder = _currentOrder.asStateFlow()
+    val currentOrder = orderRepository.getOrderNumberOfItems()
 
     private val _currentCategories = MutableStateFlow<List<MenuCategoryModel>?>(null)
     val currentCategories = _currentCategories.asStateFlow()
@@ -34,9 +33,6 @@ class MenuViewModel(
         viewModelScope.launch {
             _currentUser.value = loginRepository.getCurrentUserInfo()
             _currentCategories.value = menuCategoryRepository.getMenuCategories()
-            val user = _currentUser.value
-            if (user != null)
-                _currentOrder.value = orderRepository.getOrderNumberOfItems(user.uid)
         }
     }
 
@@ -45,9 +41,6 @@ class MenuViewModel(
         if (user != null) {
             viewModelScope.launch {
                 orderRepository.addItemToOrder(userId = user.uid, itemId = itemId)
-
-                val orderNumberOfItems = orderRepository.getOrderNumberOfItems(user.uid)
-                _currentOrder.value = orderNumberOfItems
             }
         }
     }

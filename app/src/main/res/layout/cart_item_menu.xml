@@ -26,6 +26,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"
+        android:textColor="@color/primary_text_color"
         app:layout_constraintEnd_toStartOf="@id/removeButton"
         app:layout_constraintStart_toEndOf="@id/itemImage"
         app:layout_constraintTop_toTopOf="parent" />

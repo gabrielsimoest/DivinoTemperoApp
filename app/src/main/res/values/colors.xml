@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="primary_color">#363636</color>
     <color name="secondary_color">#171717</color>
+    <color name="third_color">#252525</color>
     <color name="primary_text_color">#FFFFFF</color>
     <color name="link_color">#3F51B5</color>
     <color name="emphasis_color">#f3e731</color>

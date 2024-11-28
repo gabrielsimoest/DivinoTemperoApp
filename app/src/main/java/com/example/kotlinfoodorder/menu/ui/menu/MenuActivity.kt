@@ -104,7 +104,7 @@ class MenuActivity : ComponentActivity() {
                                         setMargins(16, 0, 16, 0)
                                     }
 
-                                    setBackgroundColor(ContextCompat.getColor(this@MenuActivity, R.color.secondary_color))
+                                    setBackgroundColor(ContextCompat.getColor(this@MenuActivity, R.color.primary_color))
 
                                     setOnClickListener {
                                         if (category.name == "Todos") {
