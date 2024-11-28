@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.databinding.ActivityMenuBinding
 import com.example.kotlinfoodorder.auth.ui.login.LoginActivity
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
@@ -102,6 +103,9 @@ class MenuActivity : ComponentActivity() {
                                     ).apply {
                                         setMargins(16, 0, 16, 0)
                                     }
+
+                                    setBackgroundColor(ContextCompat.getColor(this@MenuActivity, R.color.secondary_color))
+
                                     setOnClickListener {
                                         if (category.name == "Todos") {
                                             adapter.filterItems { true }
