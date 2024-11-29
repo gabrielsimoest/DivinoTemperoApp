@@ -3,7 +3,7 @@ package com.example.kotlinfoodorder.menu.ui.menu
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlinfoodorder.menu.data.repository.MenuCategoryRepository
-import com.example.kotlinfoodorder.menu.data.repository.OrderRepository
+import com.example.kotlinfoodorder.order.data.repository.OrderRepository
 import com.example.kotlinfoodorder.login.data.UserRepository
 import com.example.kotlinfoodorder.login.model.User
 import com.example.kotlinfoodorder.menu.model.MenuCategoryModel

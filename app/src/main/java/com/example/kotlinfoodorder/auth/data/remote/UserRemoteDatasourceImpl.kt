@@ -3,14 +3,17 @@ package com.example.kotlinfoodorder.login.data.remote
 import com.example.kotlinfoodorder.auth.data.remote.UserNotFoundException
 import com.example.kotlinfoodorder.auth.data.remote.UserRemoteDatasource
 import com.example.kotlinfoodorder.login.model.User
+import com.example.kotlinfoodorder.login.model.UserData
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 class UserRemoteDatasourceImpl(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
 ): UserRemoteDatasource {
     override fun isSessionValid(): Boolean {
         return firebaseAuth.currentUser != null
@@ -20,10 +23,24 @@ class UserRemoteDatasourceImpl(
         val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
 
         val firebaseUser = authResult.user
-        if (firebaseUser != null)
+        if (firebaseUser != null) {
             updateUserName(firebaseUser, name)
+            updateCreatedUserDate(firebaseUser)
+        }
 
         return mapToUserAuth(authResult)
+    }
+
+    private suspend fun updateCreatedUserDate(user: FirebaseUser) {
+        val userCollection = firestore.collection("user")
+
+        val newUserData = UserData(
+            id = user.uid,
+            userName = user.displayName ?: "",
+            userCreatedDate = System.currentTimeMillis()
+        )
+
+        userCollection.document(user.uid).set(newUserData).await()
     }
 
     private suspend fun updateUserName(user: FirebaseUser, name: String) {

@@ -2,8 +2,8 @@ package com.example.kotlinfoodorder.menu.data.repository
 
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.menu.data.remote.MenuItemRemoteDatasource
-import com.example.kotlinfoodorder.menu.model.OrderItem
-import com.example.kotlinfoodorder.menu.model.OrderModel
+import com.example.kotlinfoodorder.order.model.OrderItem
+import com.example.kotlinfoodorder.order.model.OrderModel
 import com.example.kotlinfoodorder.menu.model.MenuItem
 
 class MenuItemRepositoryImpl(

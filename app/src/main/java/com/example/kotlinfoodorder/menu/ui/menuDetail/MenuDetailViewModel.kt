@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.login.data.UserRepository
 import com.example.kotlinfoodorder.login.model.User
-import com.example.kotlinfoodorder.menu.data.repository.OrderRepository
+import com.example.kotlinfoodorder.order.data.repository.OrderRepository
 import com.example.kotlinfoodorder.menu.model.MenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

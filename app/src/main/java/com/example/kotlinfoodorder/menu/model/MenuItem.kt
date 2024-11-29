@@ -1,5 +1,4 @@
 package com.example.kotlinfoodorder.menu.model
-import com.example.kotlinfoodorder.R
 
 data class MenuItem(
     var id: String = "",
@@ -7,5 +6,5 @@ data class MenuItem(
     var name: String = "",
     var description: String = "",
     var price: Double = 0.0,
-    var imageResId: Int = R.drawable.ic_food_placeholder
+    var imagePath: String = ""
 )

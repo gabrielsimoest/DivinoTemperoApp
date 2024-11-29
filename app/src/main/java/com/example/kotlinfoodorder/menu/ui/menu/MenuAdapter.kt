@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.menu.model.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +39,15 @@ class MenuAdapter(
         holder.itemName.text = item.name
         holder.itemDescription.text = item.description
         holder.itemPrice.text = currencyFormat.format(item.price)
-        holder.imageView.setImageResource(item.imageResId)
+        val storageReference = FirebaseStorage.getInstance().reference.child(item.imagePath)
+
+        storageReference.downloadUrl.addOnSuccessListener { uri ->
+            Glide.with(holder.imageView.context)
+                .load(uri)
+                .into(holder.imageView)
+        }.addOnFailureListener {
+            holder.imageView.setImageResource(R.drawable.ic_food_placeholder)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick(item)

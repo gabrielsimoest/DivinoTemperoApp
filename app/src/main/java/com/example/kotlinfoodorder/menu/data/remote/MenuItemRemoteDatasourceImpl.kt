@@ -1,10 +1,11 @@
 package com.example.kotlinfoodorder.menu.data.remote
 
 import android.util.Log
-import com.example.kotlinfoodorder.menu.model.OrderItem
-import com.example.kotlinfoodorder.menu.model.OrderModel
+import com.example.kotlinfoodorder.order.model.OrderItem
+import com.example.kotlinfoodorder.order.model.OrderModel
 import com.example.kotlinfoodorder.menu.model.MenuItem
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 class MenuItemRemoteDatasourceImpl(
@@ -176,5 +177,56 @@ class MenuItemRemoteDatasourceImpl(
             emptyList()
         }
     }
+
+    override suspend fun placeOrder(userId: String) {
+        try {
+            val orderCollection = firestore.collection("order")
+            val result = orderCollection
+                .whereEqualTo("userId", userId)
+                .get()
+                .await()
+
+            if (result.isEmpty) {
+                Log.d("MenuItemRemoteDatasource", "No items in the order for user: $userId")
+                return
+            }
+
+            val orderItems = mutableListOf<OrderItem>()
+            val batch = firestore.batch()
+
+            result.forEach { document ->
+                val order = document.toObject(OrderModel::class.java)
+                val menuItem = getMenuItem(order.menuId)
+                menuItem?.let {
+                    val orderItem = OrderItem(
+                        id = it.id,
+                        name = it.name,
+                        price = it.price,
+                        quantity = order.quantity
+                    )
+                    orderItems.add(orderItem)
+                }
+            }
+
+            val orderPlacedData = mapOf(
+                "userId" to userId,
+                "items" to orderItems,
+                "timestamp" to System.currentTimeMillis()
+            )
+
+            val orderPlacedRef = firestore.collection("orderPlaced").document()
+            batch.set(orderPlacedRef, orderPlacedData)
+
+            result.forEach { document ->
+                batch.delete(document.reference)
+            }
+
+            batch.commit().await()
+
+        } catch (exception: Exception) {
+            Log.e("MenuItemRemoteDatasource", "Error placing the order", exception)
+        }
+    }
+
 
 }

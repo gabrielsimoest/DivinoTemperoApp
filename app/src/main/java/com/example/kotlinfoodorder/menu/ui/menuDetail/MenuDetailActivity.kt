@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
@@ -34,7 +37,16 @@ class MenuDetailActivity : ComponentActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentMenuItem.collect { item ->
                     item?.let {
-                        binding.itemImage.setImageResource(item.imageResId)
+                        val storageReference = FirebaseStorage.getInstance().reference.child(item.imagePath)
+
+                        storageReference.downloadUrl.addOnSuccessListener { uri ->
+                            Glide.with(binding.itemImage.context)
+                                .load(uri)
+                                .into(binding.itemImage)
+                        }.addOnFailureListener {
+                            binding.itemImage.setImageResource(R.drawable.ic_food_placeholder)
+                        }
+
                         binding.itemName.text = item.name
                         binding.itemDescription.text = item.description
                         binding.itemPrice.text = currencyFormat.format(item.price)
