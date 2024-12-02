@@ -1,5 +1,6 @@
 package com.example.kotlinfoodorder.menu.ui.menuDetail
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
@@ -8,6 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
+import com.example.kotlinfoodorder.menu.ui.menu.OrderActivity
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -64,5 +66,12 @@ class MenuDetailActivity : ComponentActivity() {
         }
 
         binding.btnBack.setOnClickListener { finish() }
+        binding.order.setOnClickListener { navigateToCart() }
+
+    }
+
+    private fun navigateToCart() {
+        val intent = Intent(this, OrderActivity::class.java)
+        startActivity(intent)
     }
 }
