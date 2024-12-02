@@ -3,6 +3,7 @@ package com.example.kotlinfoodorder.menu.ui.menu
 import android.R.color
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -19,6 +20,7 @@ import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.menu.model.MenuItem
 import com.example.kotlinfoodorder.menu.ui.menuDetail.MenuDetailActivity
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
@@ -70,13 +72,17 @@ class MenuActivity : ComponentActivity() {
             onAddItemClick = { item -> addItemToCart(item) }
         )
 
-
         with(binding) {
             recyclerViewMenu.layoutManager = GridLayoutManager(this@MenuActivity, 2)
             recyclerViewMenu.adapter = adapter
 
             lifecycleScope.launch {
-                adapter.loadItems()
+                showLoader(true)
+                try {
+                    adapter.loadItems()
+                } finally {
+                    showLoader(false)
+                }
             }
 
             logout.setOnClickListener {
@@ -158,4 +164,9 @@ class MenuActivity : ComponentActivity() {
     private fun showMessage(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
+
+    private fun showLoader(show: Boolean) {
+        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
 }

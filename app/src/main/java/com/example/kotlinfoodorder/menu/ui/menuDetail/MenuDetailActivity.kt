@@ -2,6 +2,7 @@ package com.example.kotlinfoodorder.menu.ui.menuDetail
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +12,7 @@ import com.example.kotlinfoodorder.R
 import com.example.kotlinfoodorder.databinding.ActivityMenuDetailBinding
 import com.example.kotlinfoodorder.menu.ui.menu.OrderActivity
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
@@ -30,7 +32,13 @@ class MenuDetailActivity : ComponentActivity() {
 
         val menuItemId = intent.getStringExtra("menuItemId") ?: "-1"
         if (menuItemId != "-1") {
-            viewModel.loadMenuItem(menuItemId)
+
+            showLoader(true)
+            try {
+                viewModel.loadMenuItem(menuItemId)
+            } finally {
+                showLoader(false)
+            }
 
             binding.btnAddItem.setOnClickListener{ viewModel.addItemToOrder(menuItemId) }
         }
@@ -74,4 +82,9 @@ class MenuDetailActivity : ComponentActivity() {
         val intent = Intent(this, OrderActivity::class.java)
         startActivity(intent)
     }
+
+    private fun showLoader(show: Boolean) {
+        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
 }

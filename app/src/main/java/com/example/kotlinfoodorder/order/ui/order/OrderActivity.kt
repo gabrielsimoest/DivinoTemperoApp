@@ -1,6 +1,7 @@
 package com.example.kotlinfoodorder.menu.ui.menu
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import com.example.kotlinfoodorder.login.data.MenuItemRepository
 import com.example.kotlinfoodorder.order.data.repository.OrderRepository
 import com.example.kotlinfoodorder.order.ui.order.OrderAdapter
 import com.example.kotlinfoodorder.order.ui.order.OrderViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,13 +46,24 @@ class OrderActivity : ComponentActivity() {
                 recyclerViewMenu.adapter = adapter
 
                 lifecycleScope.launch {
-                    adapter.loadItems()
+                    showLoader(true)
+                    try {
+                        adapter.loadItems()
+                    } finally {
+                        showLoader(false)
+                    }
                 }
+
 
                 lifecycleScope.launch {
                     viewModel.orderSuccess.collect { orderSuccess ->
                         if (orderSuccess) {
-                            adapter.loadItems()
+                            showLoader(true)
+                            try {
+                                adapter.loadItems()
+                            } finally {
+                                showLoader(false)
+                            }
                             showToast("Pedido realizado com sucesso!")
                         } else {
                             showToast("Erro ao realizar o pedido. Tente novamente.")
@@ -66,5 +79,9 @@ class OrderActivity : ComponentActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoader(show: Boolean) {
+        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 }
